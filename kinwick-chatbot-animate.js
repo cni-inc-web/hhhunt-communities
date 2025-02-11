@@ -1,6 +1,6 @@
 function waitForBubbleButton() {
     let bubble = document.querySelector("#chatbase-bubble-button");
-    let introBox = document.querySelector("#chatbase-message-bubble");
+    let introBox = document.querySelector("#chatbase-message-bubbles");
 
     if (bubble && introBox) {
         console.log("Button and message bubble found! Starting animation.");
@@ -16,17 +16,20 @@ function startPulsing(bubble, introBox) {
     let maxPulses = 6;
     let growing = true;
 
+    // Initial opacity set to 0 before any animation starts
+    introBox.style.setProperty("opacity", "0", "important");
+
     function pulse() {
         if (pulseCount >= maxPulses) {
             bubble.style.setProperty("width", "4vw", "important");
             bubble.style.setProperty("height", "4vw", "important");
-            introBox.style.setProperty("opacity", "0", "important"); // Corrected: opacity uses values between 0 and 1
+            introBox.style.setProperty("opacity", "1", "important"); // Final opacity set to 1
+            console.log("Pulsing finished, introBox visible.");
             return;
         }
 
         bubble.style.setProperty("width", growing ? "4vw" : "3vw", "important");
         bubble.style.setProperty("height", growing ? "4vw" : "3vw", "important");
-        introBox.style.setProperty("bottom", (pulseCount === maxPulses) ? "100%" : "0%", "important"); // Corrected: values should be strings
 
         growing = !growing;
         if (!growing) pulseCount++;
