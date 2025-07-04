@@ -4,8 +4,9 @@ function injectCSS() {
     style.innerHTML = `
         #chatbase-bubble-button {
             border-radius: 50% !important;
+            transition: transform 0.5s linear !important; /* Ensure smooth transition */
         }
-        
+
         img[src="https://backend.chatbase.co/storage/v1/object/public/chat-icons/7d2b8915-b12a-448e-a97b-8716268b75a8/gzjoC_Mftn15aquSPL8VE.jpg"] {
             width: 100% !important;
             height: 100% !important;
@@ -54,28 +55,25 @@ function waitForBubbleButton() {
 // Function to start the pulsing animation
 function startPulsing(bubble, introBox) {
     let pulseCount = 0;
-    let maxPulses = 6;
+    let maxPulses = 3;
     let growing = true;
 
     introBox.style.setProperty("opacity", "0", "important");
 
-    function pulse() {
+    // Using setInterval to create smooth back-and-forth scaling
+    const interval = setInterval(() => {
         if (pulseCount >= maxPulses) {
             bubble.style.setProperty("transform", "scale(1)", "important"); // Reset to original size
             introBox.style.setProperty("opacity", "1", "important");
+            clearInterval(interval); // Stop the interval after max pulses
             return;
         }
 
-        bubble.style.setProperty("transform-origin", "bottom right", "important"); // Anchor at bottom-right
-        bubble.style.setProperty("transform", growing ? "scale(1.3)" : "scale(1)", "important");
+        bubble.style.setProperty("transform", `scale(${growing ? 1.2 : 1})`, "important");
 
         growing = !growing;
         if (!growing) pulseCount++;
-
-        setTimeout(pulse, 500);
-    }
-
-    pulse();
+    }, 500); // This controls the duration of the grow and shrink cycle
 }
 
 // Run functions when the DOM is ready
