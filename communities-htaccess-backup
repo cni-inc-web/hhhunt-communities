@@ -1,0 +1,57 @@
+# IMPORTANT NOTE: Use this only to perform 301 for redirects control panel cannot do. See trello note.
+# Example - this line is in the /BLOG folder htaccess
+# This line by siteground support redirects ONLY the home page of the blog, the rest stay. 
+# THIS GOES in the /blog folder to work correctly! SEE THERE (done and tested 3/19/2024)
+# RedirectMatch 301 /blog/?$ https://www.hhhunt.com/blog/what-we-build/planned-communities
+
+# Turn off directory browsing
+Options -Indexes
+
+# Use INTERNAL path for 404 template (prevents 302)
+ErrorDocument 404 /404.html
+
+DirectoryIndex index.html index.php community-overview.html
+AddType image/avif .avif
+
+######################
+RewriteEngine On
+
+# Canonical: HTTPS + www
+RewriteCond %{HTTPS} off [OR]
+RewriteCond %{HTTP_HOST} !^www\.
+RewriteCond %{HTTP_HOST} ^(?:www\.)?(.+)\.?$ [NC]
+RewriteCond %{REQUEST_URI} !^/[0-9]+\..+\.cpaneldcv$
+RewriteCond %{REQUEST_URI} !^/\.well-known/pki-validation/[A-F0-9]{32}\.txt(?:\ Comodo\ DCV)?$
+RewriteRule .* https://www.hhhuntcommunities.com%{REQUEST_URI} [R=301,L]
+
+# Remove index.html from URLs
+RewriteRule ^index\.html$ / [R=301,L]
+RewriteRule ^(.*)/index\.html$ /$1/ [R=301,L]
+
+# Ensure direct requests to /404.html return 404 (not 200)
+RewriteCond %{THE_REQUEST} \s/+404\.html [NC]
+RewriteRule ^404\.html$ - [R=404,L]
+
+<IfModule mod_headers.c>
+  Header always set X-Content-Type-Options "nosniff"
+  Header always set X-Frame-Options "SAMEORIGIN"
+  Header always set Referrer-Policy "strict-origin-when-cross-origin"
+  Header always set Strict-Transport-Security "max-age=31536000; includeSubDomains; preload"
+
+  Header always set Permissions-Policy "accelerometer=(), gyroscope=(), camera=(), microphone=(), geolocation=(), magnetometer=(), payment=(), usb=(), interest-cohort=(), autoplay=(self), picture-in-picture=(self), encrypted-media=(self)"
+
+  Header always set Content-Security-Policy "default-src 'self' https://ajax.googleapis.com https://www.googleadservices.com; worker-src 'self' blob:; media-src 'self' https://uploads-ssl.webflow.com; script-src 'self' 'unsafe-inline' https://www.youtube.com https://unpkg.com https://www.chatbase.co https://cdn.prod.website-files.com https://assets.juicer.io https://static.elfsight.com https://js.usebasin.com https://challenges.cloudflare.com https://consentcdn.cookiebot.com https://www.googletagmanager.com https://www.google-analytics.com https://connect.facebook.net https://script.crazyegg.com https://www.google.com https://www.gstatic.com https://ajax.googleapis.com https://use.typekit.net https://d3e54v103j8qbb.cloudfront.net https://cdn.jsdelivr.net https://hhhuntresources.com https://consent.cookiebot.com https://googleads.g.doubleclick.net; style-src 'self' 'unsafe-inline' https://unpkg.com https://fonts.googleapis.com; font-src 'self' https://use.typekit.net https://fonts.gstatic.com data:; img-src 'self' data: https:; connect-src 'self' https://unpkg.com https://www.chatbase.co https://cdn.prod.website-files.com https://usebasin.com https://storage.elfsight.com https://core.service.elfsight.com https://tracking.crazyegg.com https://script.crazyegg.com https://consentcdn.cookiebot.com https://hhhuntresources.com https://www.google.com https://www.googleadservices.com https://googleads.g.doubleclick.net https://analytics.google.com https://www.google-analytics.com https://region1.google-analytics.com https://www.facebook.com https://www.googletagmanager.com https://www.google.com https://www.googleadservices.com https://analytics.google.com; frame-src https://www.facebook.com https://challenges.cloudflare.com https://cdn.embedly.com https://consentcdn.cookiebot.com https://www.youtube.com https://player.vimeo.com https://www.google.com; form-action 'self' https://www.facebook.com https://usebasin.com https://*.usebasin.com; object-src 'none'; base-uri 'none'; frame-ancestors 'self'; upgrade-insecure-requests;"
+</IfModule>
+
+<IfModule mod_deflate.c>
+  AddOutputFilterByType DEFLATE text/plain
+  AddOutputFilterByType DEFLATE text/html
+  AddOutputFilterByType DEFLATE text/xml
+  AddOutputFilterByType DEFLATE text/css
+  AddOutputFilterByType DEFLATE application/xml
+  AddOutputFilterByType DEFLATE application/xhtml+xml
+  AddOutputFilterByType DEFLATE application/rss+xml
+  AddOutputFilterByType DEFLATE application/javascript
+  AddOutputFilterByType DEFLATE application/x-javascript
+</IfModule>
+######################
