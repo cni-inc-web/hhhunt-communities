@@ -1,9 +1,3 @@
-# IMPORTANT NOTE: Use this only to perform 301 for redirects control panel cannot do. See trello note.
-# Example - this line is in the /BLOG folder htaccess
-# This line by siteground support redirects ONLY the home page of the blog, the rest stay. 
-# THIS GOES in the /blog folder to work correctly! SEE THERE (done and tested 3/19/2024)
-# RedirectMatch 301 /blog/?$ https://www.hhhunt.com/blog/what-we-build/planned-communities
-
 # Turn off directory browsing
 Options -Indexes
 
